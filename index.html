@@ -1802,5 +1802,50 @@ body{
 </script>
 <script>!function(){function t(){const t=document.getElementById("wsSettingsList");t&&!t.dataset.wsInit&&(t.dataset.wsInit="1",t.querySelectorAll(".ws-row").forEach(e=>{e.addEventListener("click",()=>{const s=e.getAttribute("data-ws"),o=t.querySelector('.ws-panel[data-ws-panel="'+s+'"]');if(!o)return;const n=e.classList.contains("open");t.querySelectorAll(".ws-row.open").forEach(s=>{if(s!==e){s.classList.remove("open");const e=t.querySelector('.ws-panel[data-ws-panel="'+s.getAttribute("data-ws")+'"]');e&&e.classList.remove("open")}}),e.classList.toggle("open",!n),o.classList.toggle("open",!n)})}))}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",t):t(),document.addEventListener("click",e=>{e.target.closest&&e.target.closest('[data-tab="profile"]')&&setTimeout(t,50);e.target.closest&&e.target.closest("#profileQrBtn")&&"function"==typeof toast&&toast("QR به‌زودی فعال می‌شود")})}();
 </script>
+<script>
+/* v2: ورود فقط با نام کاربری — ثبت‌نام مستقیم بسته است */
+(function(){
+  function B(){ try{ return localStorage.getItem("server_url") || "" }catch(e){ return "" } }
+  /* بعد از خروج، صفحه تازه شود تا دوباره دروازه ورود بیاید */
+  var of = window.fetch.bind(window);
+  window.fetch = function(u, o){
+    var p = of(u, o);
+    if(String(u).indexOf("/api/auth/logout") > -1){
+      p.then(function(r){ if(r.ok) location.replace(location.href.split("#")[0]); }).catch(function(){});
+    }
+    return p;
+  };
+  var b = B(); if(!b) return;
+  fetch(b + "/api/auth/me", { credentials: "include" }).then(function(r){
+    if(r.status !== 401) return;
+    var ov = document.createElement("div");
+    ov.style.cssText = "position:fixed;inset:0;z-index:2147483000;background:#f6f9f7;display:flex;align-items:center;justify-content:center;font-family:Vazirmatn,sans-serif;padding:20px";
+    var c = document.createElement("div");
+    c.style.cssText = "background:#fff;border:1px solid #dbe4de;border-radius:18px;padding:28px 24px;max-width:380px;width:100%;box-shadow:0 8px 30px rgba(16,23,21,.08);text-align:center;box-sizing:border-box";
+    c.innerHTML = '<div style="font-size:20px;font-weight:800;color:#101715;margin-bottom:6px">ورود</div>'
+      + '<div style="font-size:13px;color:#5c6b63;line-height:1.9;margin-bottom:18px">نام کاربری‌ای را که از مدیر گرفته‌ای وارد کن.</div>'
+      + '<input id="gate-un" placeholder="username" autocomplete="off" style="width:100%;direction:ltr;text-align:center;padding:12px;border:1.5px solid #dbe4de;border-radius:12px;font-size:15px;outline:none;box-sizing:border-box;margin-bottom:14px;font-family:inherit">'
+      + '<div id="gate-msg" style="font-size:12.5px;min-height:20px;color:#a33333;margin-bottom:6px"></div>'
+      + '<button id="gate-go" style="width:100%;padding:12px;border:none;border-radius:12px;background:#13a866;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">ورود</button>';
+    ov.appendChild(c); document.body.appendChild(ov);
+    var un = document.getElementById("gate-un"), msg = document.getElementById("gate-msg"), go = document.getElementById("gate-go");
+    function login(){
+      var v = (un.value || "").trim().toLowerCase();
+      if(!v){ msg.textContent = "نام کاربری را وارد کن"; return; }
+      go.disabled = true; go.textContent = "...";
+      fetch(b + "/api/auth/login", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: v }) })
+        .then(function(r){ return r.json().then(function(j){ return { r: r, j: j } }) })
+        .then(function(x){
+          if(x.r.ok && x.j.ok){ location.reload(); }
+          else { msg.textContent = (x.j && x.j.error) || "نام کاربری معتبر نیست"; go.disabled = false; go.textContent = "ورود"; }
+        })
+        .catch(function(){ msg.textContent = "خطا در اتصال به سرور"; go.disabled = false; go.textContent = "ورود" });
+    }
+    go.onclick = login;
+    un.onkeydown = function(e){ if(e.key === "Enter") login(); };
+    un.focus();
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

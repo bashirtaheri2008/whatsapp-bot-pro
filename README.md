@@ -1,15 +1,13 @@
 # WhatsApp Bot Pro — پنل فرانت‌اند
 
-پنل کاربری ربات واتساپ (نسخه ۱) — به سرور اصلی وصل می‌شود:
-`https://whatsapp-bot-cyz9.onrender.com`
+پنل کاربری ربات واتساپ. آدرس سرور دیگر در کد ثابت نیست؛
+از صفحه `server.html` (مسیر `/server`) آدرس سرور را وارد و ذخیره کن.
+پنل آن را در مرورگر (localStorage) نگه می‌دارد و به همان وصل می‌شود.
 
-## هاست
-GitHub Pages: https://bashirtaheri2008.github.io/whatsapp-bot-pro/
-
-هر تغییر (push) در برنچ `main` به‌صورت خودکار روی سایت اعمال می‌شود.
-
-## فایل‌ها
-- `index.html` — کل پنل (کد obfuscate شده)
+- `index.html` — پنل اصلی (اگر سروری ذخیره نشده باشد، خودکار به صفحه تنظیم سرور می‌رود)
+- `server.html` — صفحه تنظیم/تست آدرس سرور
 - `icon-192.png` — آیکون
 
-برای تغییر سرور مقصد، در `index.html` مقدار `BASE_URL` را عوض کنید.
+## هاست
+Cloudflare Pages (پیشنهادی): پروژه‌ای با نام `whatsapp-bot-pro` بساز → آدرس: `whatsapp-bot-pro.pages.dev`
+GitHub Pages هم کار می‌کند.

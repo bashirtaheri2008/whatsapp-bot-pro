@@ -1,7 +1,7 @@
 # WhatsApp Bot Pro — پنل فرانت‌اند
 
 پنل کاربری ربات واتساپ (نسخه ۱) — به سرور اصلی وصل می‌شود:
-`https://whatsapp-bot-cyz9.onrender.com`
+`https://whatsapp-bot-mm1t.onrender.com`
 
 ## هاست
 GitHub Pages: https://bashirtaheri2008.github.io/whatsapp-bot-pro/
